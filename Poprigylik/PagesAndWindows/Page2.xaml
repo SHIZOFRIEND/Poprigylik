@@ -1,0 +1,125 @@
+﻿<Page x:Class="Poprigylik.PagesAndWindows.Page2"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Page2">
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="MyCol">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="5">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="{Binding Logo}" Width="40" Height="40" Margin="5,0,10,0"/>
+                        <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                            <TextBlock Text="{Binding Path=AgentType.Title}" Width="120" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding Title}" Width="120" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding Phone}" Width="120" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <TextBlock Text="{Binding sale}" x:Name="sale" Width="auto" Margin="0,0,0,5"/>
+                                <TextBlock Text=" продаж за год " Width="auto" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <TextBlock Text="Приоритет: " Width="auto" Margin="0,0,0,0"/>
+                                <TextBlock Text="{Binding Priority}" Width="auto" Margin="0,0,0,5"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding Path=percent}" Margin="5,0,0,0" FontSize="24" FontWeight="Bold"/>
+                            <TextBlock Text="%" FontSize="24" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" FontFamily="Comic Sans MS" TextChanged="TextBox_TextChanged" Margin="10" Background="White"/>
+            <ComboBox Grid.Column="1" VerticalAlignment="Center" FontFamily="Comic Sans MS" SelectionChanged="ComboBox_SelectionChanged" Margin="10">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem Tag="0">
+                    <TextBlock  Text="Без сортировки" ></TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem Tag="1">
+                    <TextBlock Text="По возрастанию названия" ></TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem  Tag="2">
+                    <TextBlock Text="По убыванию названия"></TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem  Tag="3">
+                    <TextBlock Text="По возастанию приоритета"></TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem  Tag="4">
+                    <TextBlock Text="По убыванию приоритета"></TextBlock>
+                </ComboBoxItem>
+            </ComboBox>
+            <ComboBox x:Name="Type" Grid.Column="2" Width="100" HorizontalAlignment="Left" FontFamily="Comic Sans MS" VerticalAlignment="Center" ItemsSource="{Binding}" SelectionChanged="Type_SelectionChanged" Margin="10">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <DataGrid AutoGenerateColumns="False" x:Name="agentGrid" Grid.Row="1" IsReadOnly="True" GridLinesVisibility="None" MouseDown="agentGrid_MouseDown">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn CellTemplate="{StaticResource MyCol}" Width="*"/>
+            </DataGrid.Columns>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding percent}" Value="25">
+                            <Setter Property="Background" Value="Green"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+        </DataGrid>
+        <Grid Grid.Row="1" Margin="10,319,-10,33" Grid.RowSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="267*" />
+                <ColumnDefinition Width="533*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Margin="10,10,152,-10">
+                <TextBlock Text="Всего: " VerticalAlignment="Center"/>
+                <TextBlock x:Name="full" Text="" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,29,0,-9" x:Name="PaginationPanel" Grid.Column="1" >
+                <Button Content="&lt;" Width="30" Height="30" Margin="5" Click="PreviousPage_Click" Background="#FF43DCFE"/>
+                <Button Content="&gt;" Width="30" Height="30" Margin="5" Click="NextPage_Click" Background="#FF43DCFE"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="updateButton" Content="Изменение приоритетов" Click="updateButton_Click" Grid.Column="0" Grid.ColumnSpan="2" Margin="160,0,40,0" FontFamily="Comic Sans MS" Background="#FF43DCFE"/>
+            <Button x:Name="addButton" Content="Добавить" Click="addButton_Click" Grid.Column="2" Grid.ColumnSpan="2" FontFamily="Comic Sans MS" Margin="40,0,160,0" Background="#FFF9969E"/>
+        </Grid>
+    </Grid>
+</Page>
